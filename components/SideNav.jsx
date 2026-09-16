@@ -11,6 +11,9 @@ export default function SideNav({ groups }) {
       <Link href="/" className={pathname === "/" ? "active" : ""}>
         <span>All sets</span>
       </Link>
+      <Link href="/print" className={pathname === "/print" ? "active" : ""}>
+        <span>Everything on one page</span>
+      </Link>
       {groups.map((g) => (
         <div key={g.name}>
           <div className="side-group">{g.name}</div>

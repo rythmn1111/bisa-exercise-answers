@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getGroups, getSearchIndex } from "@/lib/qa";
 import Search from "@/components/Search";
 import HideToggle from "@/components/HideToggle";
+import PdfButton from "@/components/PdfButton";
 import SideNav from "@/components/SideNav";
 
 export const metadata = {
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
           <div className="spacer" />
           <Search index={index} />
           <HideToggle />
+          <PdfButton />
         </header>
         <div className="shell">
           <SideNav groups={groups} />

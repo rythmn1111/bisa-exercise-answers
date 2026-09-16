@@ -340,12 +340,137 @@ thead th { background: var(--panel-2); font-size: 12px; }
   .top, .side, .no-print { display: none !important; }
   .shell { display: block; }
   .main { padding: 0; }
-  .qa { break-inside: avoid; page-break-inside: avoid; border: 0.5pt solid #bbb; }
-  pre { background: #f6f6f4 !important; border: 0.4pt solid #ccc; color: #000; font-size: 8pt; white-space: pre-wrap; word-break: break-word; }
+  /*
+   * A Q/A pair may be taller than a page (long frames), so let it break — but
+   * never split the question from the start of its answer, and never split a
+   * code block. Forbidding breaks inside .qa leaves half-empty pages.
+   */
+  .qa { border: 0.5pt solid #bbb; }
+  .q-row { break-inside: avoid; page-break-inside: avoid; break-after: avoid; page-break-after: avoid; }
+  .a-row { break-before: avoid; page-break-before: avoid; }
+
+  pre {
+    background: #f6f6f4 !important;
+    border: 0.4pt solid #ccc;
+    color: #000;
+    font-size: 8pt;
+    white-space: pre-wrap;
+    word-break: break-word;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  /*
+   * highlight.js is imported after this file, and its `.hljs` class selector
+   * beats a bare `pre code`, so the dark theme background has to be knocked out
+   * explicitly or it paints over the light `pre`.
+   */
+  pre code, pre code.hljs { background: transparent !important; }
   pre code, pre code * { color: #000 !important; }
+  pre code .hljs-comment, pre code .hljs-quote { color: #555 !important; font-style: italic; }
+  pre code .hljs-string, pre code .hljs-number { color: #1f4d1f !important; }
+  pre code .hljs-keyword, pre code .hljs-built_in { color: #16266b !important; font-weight: 600; }
   pre:has(code.language-text) { background: #fff !important; border-left: 1pt solid #888; }
   pre:has(code.language-text)::after { display: none; }
+
+  /* inline code is light-on-dark on screen; make it legible on paper */
+  :not(pre) > code {
+    background: #f2f2ef !important;
+    border: 0.4pt solid #d5d5cf;
+    color: #000 !important;
+    font-size: 8.6pt;
+  }
+
+  strong { color: #000; }
   .q-num { color: #000; }
   .a-tag { color: #000; }
   a { color: #000; }
+  th, td { border: 0.4pt solid #bbb; padding: 3pt 4.5pt; }
+  thead th { background: #eeeae2 !important; }
+}
+
+/* ---------- PDF button ---------- */
+
+.btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #241701;
+  font-weight: 640;
+}
+.btn-pdf:hover { background: #ffc370; border-color: #ffc370; }
+.btn-pdf[disabled] { opacity: 0.6; cursor: progress; }
+.btn-pdf .spin {
+  width: 11px;
+  height: 11px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- the /print route ---------- */
+
+.print-root .print-title { padding: 40px 0 30px; border-bottom: 1px solid var(--line); }
+.print-root .pt-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.print-root .print-title h1 { font-size: 2.4rem; line-height: 1.12; margin: 0 0 14px; letter-spacing: -0.02em; }
+.print-root .print-title h1 span { font-size: 1.15rem; font-weight: 400; color: var(--fg-dim); letter-spacing: 0; }
+.print-root .print-title p { color: var(--fg-dim); max-width: 60ch; margin: 0 0 12px; }
+.print-root .pt-stats { font-size: 12.5px; color: var(--fg-faint); }
+
+.print-root .print-h1 {
+  font-size: 1.6rem;
+  margin: 0 0 6px;
+  letter-spacing: -0.015em;
+}
+.print-root .print-setmeta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--fg-faint);
+  line-height: 1.5;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  word-break: break-all;
+}
+.print-root .print-toc-group { margin-bottom: 18px; }
+.print-root .print-toc-group h3 {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin: 0 0 6px;
+}
+.print-root .print-page-break { padding-top: 34px; }
+
+@media print {
+  .print-root .print-title {
+    border: 0;
+    text-align: center;
+    padding-top: 24mm;
+  }
+  .print-root .print-title h1 { font-size: 30pt; }
+  .print-root .print-title p { margin-left: auto; margin-right: auto; }
+  .print-root .pt-kicker { color: #000; }
+
+  /* one set per page, and never split a Q/A pair across pages */
+  .print-root .print-page-break {
+    break-before: page;
+    page-break-before: always;
+    padding-top: 0;
+  }
+  .print-root .print-h1 { font-size: 17pt; }
+  .print-root .print-setmeta { font-size: 7.5pt; border-bottom: 0.5pt solid #bbb; }
+  .print-root .print-toc-group h3 { color: #000; }
+  .print-root .qa { margin-bottom: 8pt; }
 }

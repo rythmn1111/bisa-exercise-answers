@@ -22,7 +22,27 @@ bun run dev        # http://localhost:3220
 bun run build && bun run start
 bun run check      # structure + coverage
 bun run verify     # re-runs every code answer and diffs the pasted output
+bun run pdf        # -> ./BISA-Exercise-Answers.pdf
 ```
+
+## Download everything as a PDF
+
+Click **PDF** in the header. It calls `/api/pdf`, which renders the single-page `/print` route in
+headless Chrome and streams back the file — all 27 sets, 330 questions and answers, **238 A4
+pages** with running headers and page numbers. If no Chrome is found it falls back to opening
+`/print?autoprint=1` and your browser's own print dialog.
+
+From the CLI:
+
+```bash
+bun run pdf                                # -> ./BISA-Exercise-Answers.pdf
+bun run pdf --out ~/Desktop/answers.pdf
+bun run pdf --url http://localhost:3220    # reuse a running server
+```
+
+Chrome is located automatically (macOS Chrome/Chromium/Brave/Edge, or `/usr/bin/google-chrome`);
+override with `CHROME_PATH`. The `/print` route always renders answers, so the **Hide answers**
+setting never affects the PDF.
 
 ## Using it
 
@@ -30,7 +50,9 @@ bun run verify     # re-runs every code answer and diffs the pasted output
 - **Search** (`⌘K`) — searches the text of every question, then jumps to it.
 - **Hide answers** — collapses every answer so the page becomes a self-test. Click any hidden
   answer to reveal just that one. The setting persists.
-- **Print** — a print stylesheet drops the chrome, so any set prints as a clean question sheet.
+- **PDF** — downloads all 330 questions and answers as one 238-page A4 file.
+- **Print** — a print stylesheet drops the chrome, so any single set prints as a clean question
+  sheet, and `/print` holds the whole thing on one page.
 
 ## Layout
 
@@ -39,13 +61,16 @@ qa/
   app/
     page.js           all sets, grouped
     s/[id]/page.js    one set: setup block, then question/answer pairs
+    print/page.js     every set on one page, print CSS applied
+    api/pdf/route.js  headless-Chrome PDF renderer
     globals.css
-  components/         Search, SideNav, HideToggle, QA
+  components/         Search, SideNav, HideToggle, QA, PdfButton, AutoPrint
   lib/qa.js           parses data/*.md into sets and questions
   data/*.md           the content — one file per exercise set
   scripts/
     validate-qa.mjs     structure and coverage checks
     verify_answers.py   re-executes every answer, diffs the pasted output
+    build-pdf.mjs       CLI PDF build
   QA_SPEC.md            the contract every data file follows
 ```
 

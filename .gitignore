@@ -1,4 +1,8 @@
 node_modules/
 .next/
 out/
+
+# Produced by `bun run pdf`
+BISA-Exercise-Answers.pdf
+
 .DS_Store
