@@ -44,6 +44,32 @@ Chrome is located automatically (macOS Chrome/Chromium/Brave/Edge, or `/usr/bin/
 override with `CHROME_PATH`. The `/print` route always renders answers, so the **Hide answers**
 setting never affects the PDF.
 
+### Printing it on less paper
+
+Two helpers for the physical copy. Both need `python3 -m pip install --user pypdf reportlab`.
+
+```bash
+bun run trim  -- --drop 32-73          # cut a page range (e.g. a set you know)
+bun run twoup                          # 2 pages per landscape sheet, with a centre divider
+```
+
+`twoup-pdf.py` puts two portrait pages side by side on one landscape sheet with a printed divider
+down the middle, so 197 pages become **99 sheets** — 50 if you also print double-sided.
+
+```bash
+bun run twoup -- --sheet a3            # bigger paper, larger text
+bun run twoup -- --dash --gutter 14    # dashed divider, wider centre gap
+bun run twoup -- --no-divider
+bun run twoup -- --in BISA-Exercise-Answers.pdf --out full-2up.pdf
+```
+
+The script reports the scale it used and what the source's 8 pt code text will actually print at,
+so you can decide whether it is readable before spending paper. On A4 that is about **5.5 pt**;
+on A3, about 7.8 pt.
+
+One caveat on `trim`: the page footers are baked in by Chrome at render time, so a trimmed file
+still reads "Page 73 of 238". Only regenerating fixes the numbering.
+
 ## Using it
 
 - **Sidebar** — the 27 exercise sets, grouped, with question counts.
@@ -71,6 +97,8 @@ qa/
     validate-qa.mjs     structure and coverage checks
     verify_answers.py   re-executes every answer, diffs the pasted output
     build-pdf.mjs       CLI PDF build
+    trim-pdf.py         drop a page range from a generated PDF
+    twoup-pdf.py        2-up imposition with a centre divider, for printing
   QA_SPEC.md            the contract every data file follows
 ```
 

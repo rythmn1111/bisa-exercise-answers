@@ -2,7 +2,8 @@ node_modules/
 .next/
 out/
 
-# Produced by `bun run pdf`
+# Produced by `bun run pdf` / the print helpers
 BISA-Exercise-Answers.pdf
+BISA-Exercise-Answers-*.pdf
 
 .DS_Store

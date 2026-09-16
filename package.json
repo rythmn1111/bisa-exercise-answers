@@ -9,7 +9,9 @@
     "start": "next start -p 3220",
     "check": "bun run scripts/validate-qa.mjs",
     "verify": "python3 scripts/verify_answers.py",
-    "pdf": "bun run scripts/build-pdf.mjs"
+    "pdf": "bun run scripts/build-pdf.mjs",
+    "trim": "python3 scripts/trim-pdf.py",
+    "twoup": "python3 scripts/twoup-pdf.py"
   },
   "dependencies": {
     "highlight.js": "^11.10.0",
