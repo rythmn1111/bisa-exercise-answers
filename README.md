@@ -2,10 +2,14 @@
 
 A deliberately minimal companion site. Two things on the page: **the question as it was set, and
 the answer.** Code where the question wants code, words where it wants words. No teaching, no
-variants, no commentary — that is what the [guide](../book) is for.
+variants, no commentary — that is what the [guide](https://github.com/rythmn1111/bisa-exam-guide) is for.
 
 Every code answer was executed against the real data files before being published, and its real
 output is pasted underneath.
+
+**Companion site:** [bisa-exam-guide](https://github.com/rythmn1111/bisa-exam-guide) — the same
+exercise bank turned into a 16-chapter book of 231 reusable patterns, with a one-click PDF of the
+whole thing.
 
 ## Run it
 
@@ -40,8 +44,9 @@ qa/
   lib/qa.js           parses data/*.md into sets and questions
   data/*.md           the content — one file per exercise set
   scripts/
-    validate-qa.mjs   structure and coverage checks
-  QA_SPEC.md          the contract every data file follows
+    validate-qa.mjs     structure and coverage checks
+    verify_answers.py   re-executes every answer, diffs the pasted output
+  QA_SPEC.md            the contract every data file follows
 ```
 
 ## Adding or fixing a question set
