@@ -474,3 +474,90 @@ thead th { background: var(--panel-2); font-size: 12px; }
   .print-root .print-toc-group h3 { color: #000; }
   .print-root .qa { margin-bottom: 8pt; }
 }
+
+/* ---------- index / contents tables on the print route ---------- */
+
+/*
+ * Page-locator tokens. They must survive pdftotext (so the build script can
+ * find which page each question landed on) while being invisible on paper.
+ */
+.idx-marker {
+  font-size: 1px;
+  line-height: 0;
+  color: transparent;
+  user-select: none;
+}
+
+.print-root .idx-note { color: var(--fg-dim); font-size: 13px; margin: 0 0 16px; }
+
+.print-root .idx-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.print-root .idx-table td,
+.print-root .idx-table th { border: 0; padding: 3px 6px; vertical-align: top; }
+.print-root .idx-table thead th {
+  background: none;
+  border-bottom: 1px solid var(--line);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.print-root .idx-n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.print-root .idx-grouprow td {
+  padding-top: 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.print-root .idx-group { margin-bottom: 20px; }
+.print-root .idx-grouphead {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 22px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+.print-root .idx-set { margin-bottom: 14px; }
+.print-root .idx-sethead {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 620;
+  margin: 12px 0 4px;
+}
+.print-root .idx-setpage { font-family: var(--mono); font-size: 11.5px; color: var(--fg-faint); }
+.print-root .idx-qtable { font-size: 12px; }
+.print-root .idx-qtable .idx-q {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  width: 46px;
+}
+.print-root .idx-qtable .idx-text { color: var(--fg-dim); }
+
+@media print {
+  .idx-marker { font-size: 1px !important; color: #fff !important; }
+
+  .print-root .idx-note { color: #333; font-size: 9pt; }
+  .print-root .idx-table { font-size: 8.4pt; }
+  .print-root .idx-table td, .print-root .idx-table th { border: 0; padding: 1.4pt 4pt; }
+  .print-root .idx-table thead th { border-bottom: 0.5pt solid #999; color: #000; }
+  .print-root .idx-grouprow td { color: #000; padding-top: 9pt; }
+  .print-root .idx-grouphead { color: #000; border-bottom: 0.5pt solid #999; font-size: 9pt; }
+  .print-root .idx-sethead { font-size: 9.6pt; }
+  .print-root .idx-setpage { color: #333; }
+  .print-root .idx-qtable { font-size: 8pt; }
+  .print-root .idx-qtable .idx-q { color: #000; }
+  .print-root .idx-qtable .idx-text { color: #222; }
+  /* keep a set's index block together where it fits */
+  .print-root .idx-set { break-inside: avoid; page-break-inside: avoid; }
+  .print-root .idx-grouphead, .print-root .idx-sethead { break-after: avoid; page-break-after: avoid; }
+}

@@ -28,9 +28,33 @@ bun run pdf        # -> ./BISA-Exercise-Answers.pdf
 ## Download everything as a PDF
 
 Click **PDF** in the header. It calls `/api/pdf`, which renders the single-page `/print` route in
-headless Chrome and streams back the file — all 27 sets, 330 questions and answers, **238 A4
+headless Chrome and streams back the file — all 27 sets, 330 questions and answers, **250 A4
 pages** with running headers and page numbers. If no Chrome is found it falls back to opening
 `/print?autoprint=1` and your browser's own print dialog.
+
+### The index
+
+The PDF carries two navigable lists, both with real page numbers:
+
+- **Contents** (front) — every exercise set, its question count and its start page.
+- **Index of questions** (back) — all 330 questions in reading order: number, the question's own
+  wording, and the page it is answered on. Scan for the wording you recognise, turn to the page.
+
+Page numbers only exist after layout, so `bun run pdf` renders **twice**: pass 1 locates every
+question by extracting invisible `idxmark-…` tokens with `pdftotext`, then pass 2 re-renders with
+those numbers filled in. The index sits at the back and pass 1 already reserves its full length, so
+filling the numbers in cannot move a content page — and the script proves it by re-measuring
+afterwards, re-rendering if anything shifted, and printing either `verified: every printed page
+number matches where the item actually is` or a warning naming what moved.
+
+Leaving a set out renumbers and re-indexes everything correctly:
+
+```bash
+bun run pdf -- --exclude session13     # -> BISA-Exercise-Answers-no-session13.pdf, 205 pages
+```
+
+Prefer this over cutting pages out afterwards: `trim-pdf.py` cannot fix the footers or the index,
+because Chrome bakes both in at render time.
 
 From the CLI:
 

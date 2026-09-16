@@ -3,7 +3,8 @@ node_modules/
 out/
 
 # Produced by `bun run pdf` / the print helpers
-BISA-Exercise-Answers.pdf
-BISA-Exercise-Answers-*.pdf
+BISA-Exercise-Answers*.pdf
+.pagemap.json
+.pass1.pdf
 
 .DS_Store
